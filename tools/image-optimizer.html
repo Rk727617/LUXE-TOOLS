@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Optimizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .drop-area { border: 2px dashed #ccc; padding: 20px; text-align: center; }
+        .hidden { display: none; }
+        img { max-width: 100%; margin-top: 20px; }
+        .progress { width: 100%; background: #e0e0e0; }
+        .progress-bar { height: 20px; background: #76c7c0; width: 0%; }
+    </style>
+</head>
+<body>
+    <h1>Image Optimizer</h1>
+    <div class="drop-area" id="drop-area">Drag & Drop Images Here</div>
+    <input type="file" id="fileElem" multiple accept="image/*" class="hidden"></input>
+    <label for="fileElem">Or click to upload</label>
+    <div id="gallery"></div>
+    <input type="range" id="compression-slider" min="1" max="100" value="80" />
+    <p>Compression Quality: <span id="quality-value">80</span>%</p>
+    <button id="convert-button">Convert</button>
+    <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileElem = document.getElementById('fileElem');
+        const gallery = document.getElementById('gallery');
+        const qualityValue = document.getElementById('quality-value');
+        const progressBar = document.getElementById('progress-bar');
+        const compressionSlider = document.getElementById('compression-slider');
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('hover');
+        });
+
+        dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('hover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileElem.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        compressionSlider.addEventListener('input', () => {
+            qualityValue.textContent = compressionSlider.value;
+        });
+
+        function handleFiles(files) {
+            [...files].forEach(previewFile);
+        }
+
+        function previewFile(file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                gallery.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        document.getElementById('convert-button').addEventListener('click', () => {
+            const files = fileElem.files;
+            const quality = compressionSlider.value;
+            // Simulate processing
+            progressBar.style.width = '0%';
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                if (progress > 100) {
+                    clearInterval(interval);
+                } else {
+                    progressBar.style.width = progress + '%';
+                }
+            }, 500);
+            // Here you would implement the actual conversion logic
+        });
+    </script>
+</body>
+</html>

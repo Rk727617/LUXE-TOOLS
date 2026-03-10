@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Tools</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 10px; }
+        button { padding: 10px 15px; }
+    </style>
+    <script>
+        function updatePreview() {
+            const text = document.getElementById('text-input').value;
+            document.getElementById('text-preview').innerText = text;
+            document.getElementById('word-count').innerText = 'Word Count: ' + text.split(/\s+/).filter(Boolean).length;
+            document.getElementById('char-count').innerText = 'Character Count: ' + text.length;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('text-input').value;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard!');
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Text Tools</h1>
+    <textarea id="text-input" rows="10" placeholder="Type or paste your text here..." oninput="updatePreview()"></textarea>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <h3>Live Preview:</h3>
+    <div id="text-preview" style="border: 1px solid #ccc; padding: 10px;"></div>
+    <div id="word-count"></div>
+    <div id="char-count"></div>
+</body>
+</html>
